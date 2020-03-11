@@ -1,0 +1,118 @@
+<html>
+	<head>
+		<title>Known Gnome Genome</title>
+    	<link href="https://fonts.googleapis.com/css?family=Bubblegum+Sans" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/pinkfluffyunicorn@1.0.1/dist/pinkfluffyunicorn.min.js"></script>
+		<script src="web/tinycolor.js"></script>
+	</head>
+	<body>
+		<div id="unicorn-display"></div>
+		<script>
+		const width = 1280;
+		const height = 720;
+		let genomation = {};
+		let virusNames = {};
+		// Gretchen fetches the genomechens
+		fetch( "web/viruses.json" )
+			.then( r => r.json() )
+			.then( data => {
+				genomation = data;
+				Object.keys( genomation ).forEach( v => {
+					let name = genomation[ v ].name.split( " " ).slice( 0, 3 ).join( " " );
+					virusNames[ name ] = 1;
+				});
+				Object.keys( virusNames ).forEach( name => console.log( name ) );
+			} );
+
+		function getRandomInt( number ) {
+			return Math.floor( number * Math.random() );
+		}
+
+		function Init() {
+		}
+
+		function Update( timestamp, timeDiffInMs ) {
+		}
+
+		function DrawViruses( keyword, color ) {
+			const scale = 150;
+			let avgX = 0, avgY = 0, count = 0;
+			Object.keys( genomation ).filter( v => genomation[ v ].name.toLowerCase().includes( keyword.toLowerCase() ) ).forEach( v => {
+				let virus = genomation[ v ];
+				// Unicorn.AddText( `name_${virus.id}`, virus.name.split( " " ).slice( 0, 3 ).join( " " ),
+				// 	avgX,
+				// 	avgY,
+				// 	{
+				//   fontFamily: 'Bubblegum Sans',
+				//   fontSize: 20,
+				//   fontWeight: 'bold',
+				//   // fill: "#ffffff"
+				//   fill: color//tinycolor.random().toHexString()//"#ff00ff"
+				// })
+				let point = Unicorn.AddObject( `point_${virus.id}`, {
+				  type: "circle",
+				  radius: 5 * virus.coord.c,
+				  // x: width / 2 + virus.coord.x * scale,
+				  // y: height / 2 + virus.coord.y * scale,
+				  x: virus.coord.a * scale,
+				  y: virus.coord.g * scale,
+				  z: virus.coord.c,
+				  opacity: virus.coord.t / 10,
+				  // width: 10, height: 10,
+				  // sprite: "unicorn",
+				  // bounce: 3,
+				  color: color,
+				  isStatic: true
+				} );
+				point.sprite.alpha = virus.coord.g / 10;
+				// console.log( point.sprite );
+				avgX += point.position.x;
+				avgY += point.position.y;
+				count++;
+			});
+			avgX /= count; avgY /= count;
+			console.log( avgX, avgY );
+			Unicorn.AddText( `name_${keyword}`, keyword,
+				avgX,
+				avgY,
+				{
+			  fontFamily: 'Bubblegum Sans',
+			  fontSize: 34,
+			  fontWeight: 'bold',
+			  // fill: "#ffffff"
+			  fill: color//tinycolor.random().toHexString()//"#ff00ff"
+			});
+		}
+
+		function OnChatCommand( user, command, message, flags, extra ) {
+	        // Handle Chat Commands
+	        if( command == "virus" ) {
+				DrawViruses( message, tinycolor.random().toHexString() );
+	        }
+			if( flags.broadcaster && command === "resetvirus" ) {
+				location.reload();
+			}
+		}
+
+		function OnChatMessage( user, message, flags, self, extra ) {
+        	// Handle Chat Messages
+		}
+
+		window.addEventListener('load', () => {
+			Unicorn.Create( "unicorn-display", {
+			  width: width,
+			  height: height,
+			  background: "#000000",// "transparent",
+			  // background: "transparent",
+			  init: Init,
+			  update: Update,
+			  channel: "Instafluff",
+			  onCommand: OnChatCommand,
+			  onChat: OnChatMessage,
+			  // screenWalls: false // Default: true
+			  // gravity: { x: 0, y: 0.5 } // Default: { x: 0, y: 1 }
+			});
+		});
+		</script>
+	</body>
+</html>

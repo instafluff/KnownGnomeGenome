@@ -1,0 +1,29 @@
+{
+  "name": "knowngnomegenome",
+  "version": "1.0.0",
+  "description": "Gnome-Friendly Known Virus Genome Analysis!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instafluff/KnownGnomeGenome.git"
+  },
+  "keywords": [
+    "Genome",
+    "Virus",
+    "Gnome",
+    "Instafluff",
+    "Analysis"
+  ],
+  "author": "Instafluff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instafluff/KnownGnomeGenome/issues"
+  },
+  "homepage": "https://github.com/instafluff/KnownGnomeGenome#readme",
+  "dependencies": {
+    "webwebweb": "^1.1.10"
+  }
+}
